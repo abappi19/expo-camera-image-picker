@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import { useCallback, useState } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import Animated, { FadeIn, FadeOut } from "react-native-reanimated";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -256,61 +256,60 @@ export function CameraView({
               </View>
             </View>
 
-            <View style={styles.zoomBar}>
-              {!toolsExpanded && !ratioExpanded && (
-                <ToolsButton
-                  expanded={false}
-                  onToggle={toggleToolsExpanded}
-                  presetId={presetId}
-                  onPresetSelect={applyPreset}
-                  hasActiveFilters={hasActiveFilters}
-                  accentColor={accentColor}
-                />
-              )}
-              {toolsExpanded && (
-                <ToolsButton
-                  expanded
-                  onToggle={toggleToolsExpanded}
-                  presetId={presetId}
-                  onPresetSelect={applyPreset}
-                  hasActiveFilters={hasActiveFilters}
-                  accentColor={accentColor}
-                />
-              )}
-              {!toolsExpanded && !ratioExpanded && (
-                <Animated.View
-                  entering={FadeIn.duration(250).withInitialValues({
-                    transform: [{ scaleX: 0.3 }],
-                  })}
-                  exiting={FadeOut.duration(150).withInitialValues({
-                    transform: [{ scaleX: 1 }],
-                  })}
-                >
-                  <ZoomSelector
-                    selectedZoom={selectedZoom}
-                    onSelect={setSelectedZoom}
-                    supportsUltraWide={supportsUltraWide}
-                    accentColor={accentColor}
-                  />
-                </Animated.View>
-              )}
-              {!toolsExpanded && (
-                <AspectRatioSelector
-                  selectedRatio={selectedRatio}
-                  onSelect={handleRatioChange}
-                  expanded={ratioExpanded}
-                  onToggle={toggleRatioExpanded}
-                  accentColor={accentColor}
-                />
-              )}
-            </View>
-
             <View
               style={[
                 styles.bottomBarAbsolute,
                 { paddingBottom: insets.bottom },
               ]}
             >
+              <View style={styles.zoomBar}>
+                {!toolsExpanded && !ratioExpanded && (
+                  <ToolsButton
+                    expanded={false}
+                    onToggle={toggleToolsExpanded}
+                    presetId={presetId}
+                    onPresetSelect={applyPreset}
+                    hasActiveFilters={hasActiveFilters}
+                    accentColor={accentColor}
+                  />
+                )}
+                {toolsExpanded && (
+                  <ToolsButton
+                    expanded
+                    onToggle={toggleToolsExpanded}
+                    presetId={presetId}
+                    onPresetSelect={applyPreset}
+                    hasActiveFilters={hasActiveFilters}
+                    accentColor={accentColor}
+                  />
+                )}
+                {!toolsExpanded && !ratioExpanded && (
+                  <Animated.View
+                    entering={FadeIn.duration(250).withInitialValues({
+                      transform: [{ scaleX: 0.3 }],
+                    })}
+                    exiting={FadeOut.duration(150).withInitialValues({
+                      transform: [{ scaleX: 1 }],
+                    })}
+                  >
+                    <ZoomSelector
+                      selectedZoom={selectedZoom}
+                      onSelect={setSelectedZoom}
+                      supportsUltraWide={supportsUltraWide}
+                      accentColor={accentColor}
+                    />
+                  </Animated.View>
+                )}
+                {!toolsExpanded && (
+                  <AspectRatioSelector
+                    selectedRatio={selectedRatio}
+                    onSelect={handleRatioChange}
+                    expanded={ratioExpanded}
+                    onToggle={toggleRatioExpanded}
+                    accentColor={accentColor}
+                  />
+                )}
+              </View>
               <View style={styles.bottomControls}>
                 <View style={styles.sideButton}>
                   {showGalleryButton && (
@@ -392,15 +391,11 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   zoomBar: {
-    position: "absolute",
-    bottom: 138,
-    left: 0,
-    right: 0,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
     gap: 8,
-    zIndex: 10,
+    marginBottom: 16,
   },
   bottomBarAbsolute: {
     position: "absolute",

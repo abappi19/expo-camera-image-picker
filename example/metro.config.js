@@ -9,7 +9,7 @@ const config = getDefaultConfig(projectRoot);
 // Watch the library source for live changes
 config.watchFolders = [libraryRoot];
 
-// Resolve library source from the parent directory
+// Resolve from both example and library node_modules
 config.resolver.nodeModulesPaths = [
   path.resolve(projectRoot, 'node_modules'),
   path.resolve(libraryRoot, 'node_modules'),

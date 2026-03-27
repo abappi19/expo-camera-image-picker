@@ -12,5 +12,5 @@
     "types": ["jest", "react", "react-native"],
     "baseUrl": "."
   },
-  "include": ["src", "example"]
+  "include": ["src"]
 }

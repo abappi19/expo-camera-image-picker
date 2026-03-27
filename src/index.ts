@@ -14,7 +14,9 @@ export { AspectRatioSelector } from "./components/aspect-ratio-selector";
 export { ZoomSelector } from "./components/zoom-selector";
 export { FlashButton } from "./components/flash-button";
 export { GridButton } from "./components/grid-button";
+export { ToolsButton } from "./components/tools-button";
 export { CameraGridOverlay } from "./components/camera-grid-overlay";
+export { FocusIndicator } from "./components/focus-indicator";
 
 // Types
 export type { CameraViewProps, CaptureResult } from "./types/camera.types";
@@ -31,3 +33,11 @@ export type {
   FlashMode,
 } from "./types";
 export type { ZoomLevel } from "./hooks/use-zoom";
+export type {
+  FilterValues,
+  FilterPreset,
+  FiltersState,
+} from "./hooks/use-filters";
+export type { FocusPoint, TapToFocusState } from "./hooks/use-tap-to-focus";
+export { useFilters, FILTER_PRESETS } from "./hooks/use-filters";
+export { useTapToFocus } from "./hooks/use-tap-to-focus";

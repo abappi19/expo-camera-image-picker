@@ -10,6 +10,7 @@ import { AspectRatioSelector } from "./aspect-ratio-selector";
 import { CameraFlipOverlayView, useCameraFlip } from "./camera-flip-overlay";
 import { CameraGridOverlay } from "./camera-grid-overlay";
 import { FlashButton } from "./flash-button";
+import { FocusIndicator } from "./focus-indicator";
 import { GridButton } from "./grid-button";
 import {
   CameraIcon,
@@ -24,14 +25,17 @@ import {
 } from "./ratio-transition-overlay";
 import { ReanimatedCamera } from "./reanimated-camera";
 import { ShutterButton } from "./shutter-button";
+import { ToolsButton } from "./tools-button";
 import { ZoomSelector } from "./zoom-selector";
 import { useAnimatedZoom } from "../hooks/use-animated-zoom";
 import { useAspectRatio } from "../hooks/use-aspect-ratio";
 import { useCameraControls } from "../hooks/use-camera-controls";
 import { useCameraPermissions } from "../hooks/use-camera-permissions";
+import { useFilters } from "../hooks/use-filters";
 import { useFlash, type FlashMode } from "../hooks/use-flash";
 import { useGalleryPicker } from "../hooks/use-gallery-picker";
 import { useGrid } from "../hooks/use-grid";
+import { useTapToFocus } from "../hooks/use-tap-to-focus";
 import { useZoom } from "../hooks/use-zoom";
 import type { CameraViewProps } from "../types/camera.types";
 export function CameraView({
@@ -65,12 +69,15 @@ export function CameraView({
   } = useFlash(device);
   const { showGrid, toggleGrid } = useGrid();
   const { pickFromGallery } = useGalleryPicker();
+  const { filters, presetId, applyPreset, hasActiveFilters } = useFilters();
+  const { focusPoint, handleTap } = useTapToFocus(cameraRef);
   const { frameWidth, frameHeight } = useAspectRatioLayout(selectedRatio);
   const ratioTransition = useRatioTransition();
   const cameraFlip = useCameraFlip();
   const insets = useSafeAreaInsets();
   const [ratioExpanded, setRatioExpanded] = useState(false);
   const [flashExpanded, setFlashExpanded] = useState(false);
+  const [toolsExpanded, setToolsExpanded] = useState(false);
 
   const handleRatioChange = useCallback(
     (ratio: typeof selectedRatio) => {
@@ -98,6 +105,10 @@ export function CameraView({
 
   const toggleFlashExpanded = useCallback(() => {
     setFlashExpanded((prev) => !prev);
+  }, []);
+
+  const toggleToolsExpanded = useCallback(() => {
+    setToolsExpanded((prev) => !prev);
   }, []);
 
   const handleFlashSelect = useCallback(
@@ -194,7 +205,8 @@ export function CameraView({
       ) : (
         <>
           <View style={styles.cameraWrapper}>
-            <View
+            <Pressable
+              onPress={handleTap}
               style={{
                 width: frameWidth,
                 height: frameHeight,
@@ -208,12 +220,16 @@ export function CameraView({
                 format={format}
                 isActive
                 photo
+                exposure={filters.brightness * 2}
                 torch={torchEnabled ? "on" : "off"}
                 animatedProps={animatedZoomProps}
                 resizeMode="cover"
               />
               {showGrid && <CameraGridOverlay />}
-            </View>
+              {focusPoint && (
+                <FocusIndicator point={focusPoint} accentColor={accentColor} />
+              )}
+            </Pressable>
             <View style={[styles.topBar, { paddingTop: insets.top }]}>
               <View style={styles.topBarContainer}>
                 <Pressable
@@ -241,7 +257,27 @@ export function CameraView({
             </View>
 
             <View style={styles.zoomBar}>
-              {!ratioExpanded && (
+              {!toolsExpanded && !ratioExpanded && (
+                <ToolsButton
+                  expanded={false}
+                  onToggle={toggleToolsExpanded}
+                  presetId={presetId}
+                  onPresetSelect={applyPreset}
+                  hasActiveFilters={hasActiveFilters}
+                  accentColor={accentColor}
+                />
+              )}
+              {toolsExpanded && (
+                <ToolsButton
+                  expanded
+                  onToggle={toggleToolsExpanded}
+                  presetId={presetId}
+                  onPresetSelect={applyPreset}
+                  hasActiveFilters={hasActiveFilters}
+                  accentColor={accentColor}
+                />
+              )}
+              {!toolsExpanded && !ratioExpanded && (
                 <Animated.View
                   entering={FadeIn.duration(250).withInitialValues({
                     transform: [{ scaleX: 0.3 }],
@@ -258,13 +294,15 @@ export function CameraView({
                   />
                 </Animated.View>
               )}
-              <AspectRatioSelector
-                selectedRatio={selectedRatio}
-                onSelect={handleRatioChange}
-                expanded={ratioExpanded}
-                onToggle={toggleRatioExpanded}
-                accentColor={accentColor}
-              />
+              {!toolsExpanded && (
+                <AspectRatioSelector
+                  selectedRatio={selectedRatio}
+                  onSelect={handleRatioChange}
+                  expanded={ratioExpanded}
+                  onToggle={toggleRatioExpanded}
+                  accentColor={accentColor}
+                />
+              )}
             </View>
 
             <View

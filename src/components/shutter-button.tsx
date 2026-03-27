@@ -1,12 +1,70 @@
 import React from 'react';
-import { Pressable, View } from 'react-native';
+import {
+  Pressable,
+  View,
+  ActivityIndicator,
+  StyleSheet,
+} from 'react-native';
 
-export function ShutterButton({ onPress, disabled }: { onPress: () => void; disabled?: boolean }) {
+interface ShutterButtonProps {
+  onPress: () => void;
+  disabled?: boolean;
+  isCapturing?: boolean;
+  accentColor?: string;
+}
+
+const OUTER_SIZE = 72;
+const INNER_SIZE = 58;
+const BORDER_WIDTH = 4;
+
+export function ShutterButton({
+  onPress,
+  disabled = false,
+  isCapturing = false,
+  accentColor = '#FFFFFF',
+}: ShutterButtonProps) {
   return (
-    <Pressable onPress={onPress} disabled={disabled} style={{ opacity: disabled ? 0.5 : 1 }}>
-      <View style={{ width: 76, height: 76, borderRadius: 40, borderWidth: 4, borderColor: '#fff', alignItems: 'center', justifyContent: 'center' }}>
-        <View style={{ width: 58, height: 58, borderRadius: 30, backgroundColor: '#fff' }} />
-      </View>
+    <Pressable
+      onPress={onPress}
+      disabled={disabled || isCapturing}
+      style={({ pressed }) => [
+        styles.outer,
+        { borderColor: accentColor },
+        pressed && styles.outerPressed,
+        (disabled || isCapturing) && styles.outerDisabled,
+      ]}
+      accessibilityRole="button"
+      accessibilityLabel="Take photo"
+    >
+      {isCapturing ? (
+        <ActivityIndicator size="small" color={accentColor} />
+      ) : (
+        <View style={[styles.inner, { backgroundColor: accentColor }]} />
+      )}
     </Pressable>
   );
 }
+
+const styles = StyleSheet.create({
+  outer: {
+    width: OUTER_SIZE,
+    height: OUTER_SIZE,
+    borderRadius: OUTER_SIZE / 2,
+    borderWidth: BORDER_WIDTH,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'transparent',
+  },
+  outerPressed: {
+    opacity: 0.7,
+    transform: [{ scale: 0.95 }],
+  },
+  outerDisabled: {
+    opacity: 0.4,
+  },
+  inner: {
+    width: INNER_SIZE,
+    height: INNER_SIZE,
+    borderRadius: INNER_SIZE / 2,
+  },
+});

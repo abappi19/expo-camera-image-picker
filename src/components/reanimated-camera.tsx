@@ -1,5 +1,4 @@
-import React from 'react';
-import { Camera, type CameraProps } from 'react-native-vision-camera';
+import { createAnimatedComponent } from 'react-native-reanimated';
+import { Camera } from 'react-native-vision-camera';
 
-export const ReanimatedCamera = React.forwardRef<Camera, CameraProps>((props, ref) => <Camera ref={ref} {...props} />);
-ReanimatedCamera.displayName = 'ReanimatedCamera';
+export const ReanimatedCamera = createAnimatedComponent(Camera);

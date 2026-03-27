@@ -1,6 +1,16 @@
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 
-export function useGrid(initial = false) {
-  const [showGrid, setShowGrid] = useState(initial);
-  return { showGrid, toggleGrid: () => setShowGrid((prev) => !prev), setShowGrid };
+export interface GridState {
+  showGrid: boolean;
+  toggleGrid: () => void;
+}
+
+export function useGrid(): GridState {
+  const [showGrid, setShowGrid] = useState(false);
+
+  const toggleGrid = useCallback(() => {
+    setShowGrid((prev) => !prev);
+  }, []);
+
+  return { showGrid, toggleGrid };
 }

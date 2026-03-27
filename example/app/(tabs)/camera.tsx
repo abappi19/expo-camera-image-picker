@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Image, Pressable, ScrollView, StyleSheet, View } from 'react-native';
+import { Image, Modal, Pressable, ScrollView, StyleSheet, View } from 'react-native';
 import { useCameraImagePicker } from 'expo-camera-image-picker';
 import type { CameraPickerResult } from 'expo-camera-image-picker';
 import { ThemedText } from '@/components/themed-text';
@@ -10,6 +10,7 @@ export default function CameraScreen() {
   const { openCamera } = useCameraImagePicker();
   const [captures, setCaptures] = useState<CameraPickerResult[]>([]);
   const [lastError, setLastError] = useState<string | null>(null);
+  const [previewUri, setPreviewUri] = useState<string | null>(null);
   const colorScheme = useColorScheme();
   const isDark = colorScheme === 'dark';
 
@@ -22,7 +23,6 @@ export default function CameraScreen() {
     } else if (response.uri) {
       setCaptures((prev) => [response, ...prev]);
     }
-    // uri === null && error === null means cancelled
   };
 
   const latestCapture = captures[0] ?? null;
@@ -51,7 +51,9 @@ export default function CameraScreen() {
             <ThemedText type="subtitle" style={styles.sectionLabel}>
               Last Capture
             </ThemedText>
-            <Image source={{ uri: latestCapture.uri }} style={styles.preview} />
+            <Pressable onPress={() => setPreviewUri(latestCapture.uri)}>
+              <Image source={{ uri: latestCapture.uri }} style={styles.preview} />
+            </Pressable>
           </View>
         )}
 
@@ -62,12 +64,25 @@ export default function CameraScreen() {
             </ThemedText>
             <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.gallery}>
               {captures.map((cap, i) => (
-                <Image key={`${cap.uri}-${i}`} source={{ uri: cap.uri }} style={styles.thumb} />
+                <Pressable key={`${cap.uri}-${i}`} onPress={() => setPreviewUri(cap.uri)}>
+                  <Image source={{ uri: cap.uri }} style={styles.thumb} />
+                </Pressable>
               ))}
             </ScrollView>
           </View>
         )}
       </ScrollView>
+
+      <Modal visible={!!previewUri} animationType="fade" transparent statusBarTranslucent>
+        <Pressable style={styles.previewOverlay} onPress={() => setPreviewUri(null)}>
+          {previewUri && (
+            <Image source={{ uri: previewUri }} style={styles.fullImage} resizeMode="contain" />
+          )}
+          <View style={styles.closeHint}>
+            <ThemedText style={styles.closeHintText}>Tap to close</ThemedText>
+          </View>
+        </Pressable>
+      </Modal>
     </ThemedView>
   );
 }
@@ -120,5 +135,23 @@ const styles = StyleSheet.create({
     width: 80,
     height: 80,
     borderRadius: 8,
+  },
+  previewOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.95)',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  fullImage: {
+    width: '100%',
+    height: '100%',
+  },
+  closeHint: {
+    position: 'absolute',
+    bottom: 60,
+  },
+  closeHintText: {
+    color: 'rgba(255,255,255,0.5)',
+    fontSize: 14,
   },
 });

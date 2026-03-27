@@ -1,11 +1,12 @@
-import { useMemo } from 'react';
-import { useWindowDimensions } from 'react-native';
-import type { AspectRatio } from '../hooks/use-aspect-ratio';
+import { useMemo } from "react";
+import { useWindowDimensions } from "react-native";
+
+import type { AspectRatio } from "../hooks/use-aspect-ratio";
 
 const RATIO_VALUES: Record<AspectRatio, number> = {
-  '16:9': 16 / 9,
-  '4:3': 4 / 3,
-  '1:1': 1,
+  "16:9": 16 / 9,
+  "4:3": 4 / 3,
+  "1:1": 1,
 };
 
 export function useAspectRatioLayout(ratio: AspectRatio) {

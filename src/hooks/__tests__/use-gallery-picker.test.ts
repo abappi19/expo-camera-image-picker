@@ -1,10 +1,11 @@
-import { renderHook, act } from '@testing-library/react-native';
-import { useGalleryPicker } from '../use-gallery-picker';
+import { renderHook, act } from "@testing-library/react-native";
+
+import { useGalleryPicker } from "../use-gallery-picker";
 
 const mockRequestMediaLibraryPermissionsAsync = jest.fn();
 const mockLaunchImageLibraryAsync = jest.fn();
 
-jest.mock('expo-image-picker', () => ({
+jest.mock("expo-image-picker", () => ({
   requestMediaLibraryPermissionsAsync: (...args: any[]) =>
     mockRequestMediaLibraryPermissionsAsync(...args),
   launchImageLibraryAsync: (...args: any[]) =>
@@ -14,17 +15,17 @@ jest.mock('expo-image-picker', () => ({
 beforeEach(() => {
   jest.clearAllMocks();
   mockRequestMediaLibraryPermissionsAsync.mockResolvedValue({
-    status: 'granted',
+    status: "granted",
   });
 });
 
-describe('useGalleryPicker', () => {
-  it('returns pickFromGallery function', () => {
+describe("useGalleryPicker", () => {
+  it("returns pickFromGallery function", () => {
     const { result } = renderHook(() => useGalleryPicker());
-    expect(typeof result.current.pickFromGallery).toBe('function');
+    expect(typeof result.current.pickFromGallery).toBe("function");
   });
 
-  it('requests media library permission', async () => {
+  it("requests media library permission", async () => {
     mockLaunchImageLibraryAsync.mockResolvedValue({
       canceled: true,
       assets: null,
@@ -39,9 +40,9 @@ describe('useGalleryPicker', () => {
     expect(mockRequestMediaLibraryPermissionsAsync).toHaveBeenCalledTimes(1);
   });
 
-  it('returns null when permission denied', async () => {
+  it("returns null when permission denied", async () => {
     mockRequestMediaLibraryPermissionsAsync.mockResolvedValue({
-      status: 'denied',
+      status: "denied",
     });
 
     const { result } = renderHook(() => useGalleryPicker());
@@ -55,12 +56,12 @@ describe('useGalleryPicker', () => {
     expect(mockLaunchImageLibraryAsync).not.toHaveBeenCalled();
   });
 
-  it('launches image library with multi-select', async () => {
+  it("launches image library with multi-select", async () => {
     mockLaunchImageLibraryAsync.mockResolvedValue({
       canceled: false,
       assets: [
-        { uri: 'file://photo1.jpg', width: 100, height: 100 },
-        { uri: 'file://photo2.jpg', width: 200, height: 200 },
+        { uri: "file://photo1.jpg", width: 100, height: 100 },
+        { uri: "file://photo2.jpg", width: 200, height: 200 },
       ],
     });
 
@@ -72,16 +73,16 @@ describe('useGalleryPicker', () => {
 
     expect(mockLaunchImageLibraryAsync).toHaveBeenCalledWith({
       allowsMultipleSelection: true,
-      mediaTypes: ['images'],
+      mediaTypes: ["images"],
     });
   });
 
-  it('returns URIs from selected assets', async () => {
+  it("returns URIs from selected assets", async () => {
     mockLaunchImageLibraryAsync.mockResolvedValue({
       canceled: false,
       assets: [
-        { uri: 'file://photo1.jpg', width: 100, height: 100 },
-        { uri: 'file://photo2.jpg', width: 200, height: 200 },
+        { uri: "file://photo1.jpg", width: 100, height: 100 },
+        { uri: "file://photo2.jpg", width: 200, height: 200 },
       ],
     });
 
@@ -92,10 +93,10 @@ describe('useGalleryPicker', () => {
       uris = await result.current.pickFromGallery();
     });
 
-    expect(uris).toEqual(['file://photo1.jpg', 'file://photo2.jpg']);
+    expect(uris).toEqual(["file://photo1.jpg", "file://photo2.jpg"]);
   });
 
-  it('returns null when user cancels picker', async () => {
+  it("returns null when user cancels picker", async () => {
     mockLaunchImageLibraryAsync.mockResolvedValue({
       canceled: true,
       assets: null,
@@ -111,7 +112,7 @@ describe('useGalleryPicker', () => {
     expect(uris).toBeNull();
   });
 
-  it('returns null when assets is null', async () => {
+  it("returns null when assets is null", async () => {
     mockLaunchImageLibraryAsync.mockResolvedValue({
       canceled: false,
       assets: null,
@@ -127,7 +128,7 @@ describe('useGalleryPicker', () => {
     expect(uris).toBeNull();
   });
 
-  it('returns null when assets is empty array', async () => {
+  it("returns null when assets is empty array", async () => {
     mockLaunchImageLibraryAsync.mockResolvedValue({
       canceled: false,
       assets: [],

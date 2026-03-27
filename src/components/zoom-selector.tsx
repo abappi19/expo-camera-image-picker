@@ -1,7 +1,8 @@
-import React, { useMemo } from 'react';
-import { View, Pressable, Text, StyleSheet } from 'react-native';
-import type { ZoomLevel } from '../hooks/use-zoom';
-import { getContrastColor } from '../utils/contrast-color';
+import React, { useMemo } from "react";
+import { View, Pressable, Text, StyleSheet } from "react-native";
+
+import type { ZoomLevel } from "../hooks/use-zoom";
+import { getContrastColor } from "../utils/contrast-color";
 
 interface ZoomSelectorProps {
   selectedZoom: ZoomLevel;
@@ -10,27 +11,30 @@ interface ZoomSelectorProps {
   accentColor?: string;
 }
 
-const ZOOM_LEVELS: ZoomLevel[] = ['0.5x', '1.0x', '2.0x', '4.0x'];
+const ZOOM_LEVELS: ZoomLevel[] = ["0.5x", "1.0x", "2.0x", "4.0x"];
 
 const ZOOM_LABELS: Record<ZoomLevel, string> = {
-  '0.5x': '.5',
-  '1.0x': '1',
-  '2.0x': '2',
-  '4.0x': '4',
+  "0.5x": ".5",
+  "1.0x": "1",
+  "2.0x": "2",
+  "4.0x": "4",
 };
 
 export function ZoomSelector({
   selectedZoom,
   onSelect,
   supportsUltraWide,
-  accentColor = '#FFFFFF',
+  accentColor = "#FFFFFF",
 }: ZoomSelectorProps) {
-  const contrastColor = useMemo(() => getContrastColor(accentColor), [accentColor]);
+  const contrastColor = useMemo(
+    () => getContrastColor(accentColor),
+    [accentColor],
+  );
   return (
     <View style={styles.container}>
       {ZOOM_LEVELS.map((zoom) => {
         const isActive = zoom === selectedZoom;
-        const isDisabled = zoom === '0.5x' && !supportsUltraWide;
+        const isDisabled = zoom === "0.5x" && !supportsUltraWide;
 
         return (
           <Pressable
@@ -73,11 +77,11 @@ export function ZoomSelector({
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
     gap: 8,
-    backgroundColor: 'rgba(0,0,0,0.35)',
+    backgroundColor: "rgba(0,0,0,0.35)",
     borderRadius: 22,
     paddingHorizontal: 4,
     paddingVertical: 4,
@@ -86,26 +90,26 @@ const styles = StyleSheet.create({
     width: 36,
     height: 36,
     borderRadius: 18,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
   },
   circleInactive: {
-    backgroundColor: 'transparent',
+    backgroundColor: "transparent",
   },
   circleDisabled: {
-    backgroundColor: 'transparent',
+    backgroundColor: "transparent",
   },
   label: {
     fontSize: 13,
-    fontWeight: '700',
+    fontWeight: "700",
   },
   labelActive: {
-    color: '#000000',
+    color: "#000000",
   },
   labelInactive: {
-    color: 'rgba(255,255,255,0.85)',
+    color: "rgba(255,255,255,0.85)",
   },
   labelDisabled: {
-    color: 'rgba(255,255,255,0.25)',
+    color: "rgba(255,255,255,0.25)",
   },
 });

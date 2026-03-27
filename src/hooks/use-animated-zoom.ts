@@ -1,10 +1,10 @@
-import { useEffect } from 'react';
+import { useEffect } from "react";
 import {
   useSharedValue,
   useAnimatedProps,
   withTiming,
-} from 'react-native-reanimated';
-import type { CameraProps } from 'react-native-vision-camera';
+} from "react-native-reanimated";
+import type { CameraProps } from "react-native-vision-camera";
 
 const ZOOM_ANIMATION_DURATION = 300;
 
@@ -17,7 +17,7 @@ export function useAnimatedZoom(targetZoom: number) {
 
   const animatedProps = useAnimatedProps<CameraProps>(
     () => ({ zoom: zoom.value }),
-    [zoom]
+    [zoom],
   );
 
   return animatedProps;

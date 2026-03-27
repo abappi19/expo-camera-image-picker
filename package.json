@@ -37,6 +37,7 @@
   "scripts": {
     "build": "expo-module build",
     "lint": "expo-module lint -- --fix",
+    "format": "eslint src --fix",
     "test": "jest",
     "typecheck": "tsc --noEmit",
     "open:ios": "xed example/ios",

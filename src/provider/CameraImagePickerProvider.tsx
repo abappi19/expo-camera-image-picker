@@ -1,77 +1,74 @@
-import React, { createContext, useMemo, useState } from 'react';
-import { DEFAULT_SUPPORTED_FEATURES } from '../constants';
-import { mergeOptions } from '../vision-camera/adapter';
+import React, {
+  createContext,
+  useCallback,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
+import { Modal } from "react-native";
+
+import { CameraView } from "../components/camera-view";
 import type {
-  CameraCaptureResult,
   CameraImagePickerProviderProps,
   CameraPickerContextValue,
-  CameraPickerOptions,
-  SupportedFeatures,
-} from '../types';
+  CameraPickerResponse,
+} from "../types";
 
-const DEFAULT_OPTIONS: CameraPickerOptions = {
-  cameraFacing: 'back',
-  aspectRatio: '4:3',
-  initialZoom: 1,
-  showGrid: false,
-  timerSeconds: 0,
-  quality: 1,
-  includeExif: false,
-  performanceMode: 'balanced',
-};
+const DEFAULT_ACCENT_COLOR = "#FFFFFF";
 
-export const CameraImagePickerContext = createContext<CameraPickerContextValue | null>(null);
+export const CameraImagePickerContext =
+  createContext<CameraPickerContextValue | null>(null);
 
-export function CameraImagePickerProvider({ children, defaultOptions, onOpen, onCancel, onCapture, onError }: CameraImagePickerProviderProps) {
+export function CameraImagePickerProvider({
+  children,
+  accentColor = DEFAULT_ACCENT_COLOR,
+}: CameraImagePickerProviderProps) {
   const [isOpen, setIsOpen] = useState(false);
-  const [isCapturing, setCapturing] = useState(false);
-  const [result, setResult] = useState<CameraCaptureResult | null>(null);
-  const [error, setError] = useState<string | null>(null);
-  const [supportedFeatures, setSupportedFeatures] = useState<SupportedFeatures>(DEFAULT_SUPPORTED_FEATURES);
-  const [options, setOptions] = useState<CameraPickerOptions>(mergeOptions(DEFAULT_OPTIONS, defaultOptions));
-
-  const openCamera = (incoming?: CameraPickerOptions) => {
-    setError(null);
-    setOptions((prev) => mergeOptions(prev, incoming));
-    setIsOpen(true);
-    onOpen?.();
-  };
-
-  const closeCamera = () => {
-    setIsOpen(false);
-    onCancel?.();
-  };
-
-  const handleSetError = (value: string | null) => {
-    setError(value);
-    if (value) onError?.(value);
-  };
-
-  const handleSetResult = (value: CameraCaptureResult | null) => {
-    setResult(value);
-    if (value) {
-      onCapture?.(value);
-      setIsOpen(false);
-    }
-  };
-
-  const value = useMemo<CameraPickerContextValue>(
-    () => ({
-      isOpen,
-      isCapturing,
-      result,
-      error,
-      options,
-      supportedFeatures,
-      openCamera,
-      closeCamera,
-      setCapturing,
-      setResult: handleSetResult,
-      setError: handleSetError,
-      setSupportedFeatures,
-    }),
-    [error, isCapturing, isOpen, options, result, supportedFeatures]
+  const resolveRef = useRef<((response: CameraPickerResponse) => void) | null>(
+    null,
   );
 
-  return <CameraImagePickerContext.Provider value={value}>{children}</CameraImagePickerContext.Provider>;
+  const openCamera = useCallback((): Promise<CameraPickerResponse> => {
+    return new Promise<CameraPickerResponse>((resolve) => {
+      resolveRef.current = resolve;
+      setIsOpen(true);
+    });
+  }, []);
+
+  const handleCapture = useCallback((uri: string) => {
+    setIsOpen(false);
+    resolveRef.current?.({ uri, error: null });
+    resolveRef.current = null;
+  }, []);
+
+  const handleClose = useCallback(() => {
+    setIsOpen(false);
+    resolveRef.current?.({ uri: null, error: null });
+    resolveRef.current = null;
+  }, []);
+
+  const value = useMemo<CameraPickerContextValue>(
+    () => ({ openCamera, accentColor }),
+    [openCamera, accentColor],
+  );
+
+  return (
+    <CameraImagePickerContext.Provider value={value}>
+      {children}
+      <Modal
+        visible={isOpen}
+        animationType="slide"
+        presentationStyle="fullScreen"
+        onRequestClose={handleClose}
+      >
+        {isOpen && (
+          <CameraView
+            onClose={handleClose}
+            onCapture={handleCapture}
+            accentColor={accentColor}
+          />
+        )}
+      </Modal>
+    </CameraImagePickerContext.Provider>
+  );
 }

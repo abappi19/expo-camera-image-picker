@@ -1,5 +1,5 @@
-import React from 'react';
-import { StyleSheet, useWindowDimensions } from 'react-native';
+import React from "react";
+import { StyleSheet, useWindowDimensions } from "react-native";
 import Animated, {
   Easing,
   runOnJS,
@@ -7,13 +7,14 @@ import Animated, {
   useSharedValue,
   withDelay,
   withTiming,
-} from 'react-native-reanimated';
-import type { AspectRatio } from '../hooks/use-aspect-ratio';
+} from "react-native-reanimated";
+
+import type { AspectRatio } from "../hooks/use-aspect-ratio";
 
 const RATIO_VALUES: Record<AspectRatio, number> = {
-  '16:9': 16 / 9,
-  '4:3': 4 / 3,
-  '1:1': 1,
+  "16:9": 16 / 9,
+  "4:3": 4 / 3,
+  "1:1": 1,
 };
 
 const CORNER_SIZE = 42;
@@ -35,7 +36,7 @@ export function useRatioTransition() {
   const { width: screenWidth, height: screenHeight } = useWindowDimensions();
 
   const show = (targetRatio: AspectRatio, onDone?: () => void) => {
-    'worklet';
+    "worklet";
     const ratioValue = RATIO_VALUES[targetRatio];
     let w = screenWidth;
     let h = screenWidth * ratioValue;
@@ -51,10 +52,22 @@ export function useRatioTransition() {
     overlayOpacity.value = 1;
 
     // Animate corners to target frame
-    frameTop.value = withTiming(t, { duration: ANIM_DURATION, easing: Easing.out(Easing.cubic) });
-    frameLeft.value = withTiming(l, { duration: ANIM_DURATION, easing: Easing.out(Easing.cubic) });
-    frameWidth.value = withTiming(w, { duration: ANIM_DURATION, easing: Easing.out(Easing.cubic) });
-    frameHeight.value = withTiming(h, { duration: ANIM_DURATION, easing: Easing.out(Easing.cubic) });
+    frameTop.value = withTiming(t, {
+      duration: ANIM_DURATION,
+      easing: Easing.out(Easing.cubic),
+    });
+    frameLeft.value = withTiming(l, {
+      duration: ANIM_DURATION,
+      easing: Easing.out(Easing.cubic),
+    });
+    frameWidth.value = withTiming(w, {
+      duration: ANIM_DURATION,
+      easing: Easing.out(Easing.cubic),
+    });
+    frameHeight.value = withTiming(h, {
+      duration: ANIM_DURATION,
+      easing: Easing.out(Easing.cubic),
+    });
 
     // Fade out after animation, then hide
     overlayOpacity.value = withDelay(
@@ -82,11 +95,20 @@ export function useRatioTransition() {
     frameHeight.value = h;
   };
 
-  return { show, initFrom, isVisible, frameTop, frameLeft, frameWidth, frameHeight, overlayOpacity };
+  return {
+    show,
+    initFrom,
+    isVisible,
+    frameTop,
+    frameLeft,
+    frameWidth,
+    frameHeight,
+    overlayOpacity,
+  };
 }
 
 export function RatioTransitionOverlay({
-  accentColor = '#FFFFFF',
+  accentColor = "#FFFFFF",
 }: RatioTransitionOverlayProps & ReturnType<typeof useRatioTransition>) {
   // This is intentionally empty — we need the hook values passed as props
   return null;
@@ -94,7 +116,7 @@ export function RatioTransitionOverlay({
 
 // The actual rendered component
 export function RatioTransitionOverlayView({
-  accentColor = '#FFFFFF',
+  accentColor = "#FFFFFF",
   isVisible,
   frameTop,
   frameLeft,
@@ -104,7 +126,7 @@ export function RatioTransitionOverlayView({
 }: RatioTransitionOverlayProps & ReturnType<typeof useRatioTransition>) {
   const containerStyle = useAnimatedStyle(() => ({
     opacity: overlayOpacity.value,
-    display: isVisible.value ? 'flex' : 'none',
+    display: isVisible.value ? "flex" : "none",
   }));
 
   const topLeftStyle = useAnimatedStyle(() => ({
@@ -128,29 +150,84 @@ export function RatioTransitionOverlayView({
   }));
 
   return (
-    <Animated.View style={[styles.overlay, containerStyle]} pointerEvents="none">
+    <Animated.View
+      style={[styles.overlay, containerStyle]}
+      pointerEvents="none"
+    >
       {/* Top-left corner */}
       <Animated.View style={[styles.corner, topLeftStyle]}>
-        <Animated.View style={[styles.cornerH, styles.cornerTop, { backgroundColor: accentColor }]} />
-        <Animated.View style={[styles.cornerV, styles.cornerLeft, { backgroundColor: accentColor }]} />
+        <Animated.View
+          style={[
+            styles.cornerH,
+            styles.cornerTop,
+            { backgroundColor: accentColor },
+          ]}
+        />
+        <Animated.View
+          style={[
+            styles.cornerV,
+            styles.cornerLeft,
+            { backgroundColor: accentColor },
+          ]}
+        />
       </Animated.View>
 
       {/* Top-right corner */}
       <Animated.View style={[styles.corner, topRightStyle]}>
-        <Animated.View style={[styles.cornerH, styles.cornerTop, styles.cornerHRight, { backgroundColor: accentColor }]} />
-        <Animated.View style={[styles.cornerV, styles.cornerRight, { backgroundColor: accentColor }]} />
+        <Animated.View
+          style={[
+            styles.cornerH,
+            styles.cornerTop,
+            styles.cornerHRight,
+            { backgroundColor: accentColor },
+          ]}
+        />
+        <Animated.View
+          style={[
+            styles.cornerV,
+            styles.cornerRight,
+            { backgroundColor: accentColor },
+          ]}
+        />
       </Animated.View>
 
       {/* Bottom-left corner */}
       <Animated.View style={[styles.corner, bottomLeftStyle]}>
-        <Animated.View style={[styles.cornerH, styles.cornerBottom, { backgroundColor: accentColor }]} />
-        <Animated.View style={[styles.cornerV, styles.cornerLeft, styles.cornerVBottom, { backgroundColor: accentColor }]} />
+        <Animated.View
+          style={[
+            styles.cornerH,
+            styles.cornerBottom,
+            { backgroundColor: accentColor },
+          ]}
+        />
+        <Animated.View
+          style={[
+            styles.cornerV,
+            styles.cornerLeft,
+            styles.cornerVBottom,
+            { backgroundColor: accentColor },
+          ]}
+        />
       </Animated.View>
 
       {/* Bottom-right corner */}
       <Animated.View style={[styles.corner, bottomRightStyle]}>
-        <Animated.View style={[styles.cornerH, styles.cornerBottom, styles.cornerHRight, { backgroundColor: accentColor }]} />
-        <Animated.View style={[styles.cornerV, styles.cornerRight, styles.cornerVBottom, { backgroundColor: accentColor }]} />
+        <Animated.View
+          style={[
+            styles.cornerH,
+            styles.cornerBottom,
+            styles.cornerHRight,
+            { backgroundColor: accentColor },
+          ]}
+        />
+        <Animated.View
+          style={[
+            styles.cornerV,
+            styles.cornerRight,
+            styles.cornerVBottom,
+            { backgroundColor: accentColor },
+          ]}
+        />
       </Animated.View>
     </Animated.View>
   );
@@ -159,24 +236,24 @@ export function RatioTransitionOverlayView({
 const styles = StyleSheet.create({
   overlay: {
     ...StyleSheet.absoluteFillObject,
-    backgroundColor: 'rgba(0,0,0,0.85)',
+    backgroundColor: "rgba(0,0,0,0.85)",
     zIndex: 20,
   },
   corner: {
-    position: 'absolute',
+    position: "absolute",
     width: CORNER_SIZE,
     height: CORNER_SIZE,
   },
   // Horizontal bar
   cornerH: {
-    position: 'absolute',
+    position: "absolute",
     width: CORNER_SIZE,
     height: CORNER_THICKNESS,
     borderRadius: CORNER_THICKNESS / 2,
   },
   // Vertical bar
   cornerV: {
-    position: 'absolute',
+    position: "absolute",
     width: CORNER_THICKNESS,
     height: CORNER_SIZE,
     borderRadius: CORNER_THICKNESS / 2,

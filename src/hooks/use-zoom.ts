@@ -1,7 +1,7 @@
-import { useState, useMemo } from 'react';
-import type { CameraDevice } from 'react-native-vision-camera';
+import { useState, useMemo } from "react";
+import type { CameraDevice } from "react-native-vision-camera";
 
-export type ZoomLevel = '0.5x' | '1.0x' | '2.0x' | '4.0x';
+export type ZoomLevel = "0.5x" | "1.0x" | "2.0x" | "4.0x";
 
 export interface ZoomState {
   selectedZoom: ZoomLevel;
@@ -20,16 +20,16 @@ function computeZoomValue(
 
   let value: number;
   switch (zoom) {
-    case '0.5x':
+    case "0.5x":
       value = minZoom;
       break;
-    case '1.0x':
+    case "1.0x":
       value = neutralZoom;
       break;
-    case '2.0x':
+    case "2.0x":
       value = neutralZoom * 2;
       break;
-    case '4.0x':
+    case "4.0x":
       value = neutralZoom * 4;
       break;
   }
@@ -38,7 +38,7 @@ function computeZoomValue(
 }
 
 export function useZoom(device: CameraDevice | undefined): ZoomState {
-  const [selectedZoom, setSelectedZoom] = useState<ZoomLevel>('1.0x');
+  const [selectedZoom, setSelectedZoom] = useState<ZoomLevel>("1.0x");
 
   const zoomValue = useMemo(
     () => computeZoomValue(selectedZoom, device),

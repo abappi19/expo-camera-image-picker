@@ -9,5 +9,5 @@ export {
   LockIcon,
   TorchIcon,
   XIcon,
-} from './icons/index';
-export type { IconProps } from './icons/index';
+} from "./icons/index";
+export type { IconProps } from "./icons/index";

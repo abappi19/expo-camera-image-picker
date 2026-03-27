@@ -1,87 +1,42 @@
-import type { StyleProp, ViewStyle } from 'react-native';
+export type CameraFacing = "front" | "back";
+export type FlashMode = "off" | "on" | "auto" | "torch";
+export type AspectRatio = "16:9" | "4:3" | "1:1";
 
-export type CameraFacing = 'front' | 'back';
-export type FlashMode = 'off' | 'on' | 'auto' | 'torch';
-export type AspectRatio = '16:9' | '4:3' | '1:1';
-export type PerformanceMode = 'quality' | 'balanced' | 'speed';
-
-export interface FilterValues {
-  brightness: number;
-  contrast: number;
-  saturation: number;
-  warmth: number;
-  tint: number;
-  highlights: number;
-  shadows: number;
-}
-
-export interface FilterPreset {
-  id: string;
-  label: string;
-  values: FilterValues;
-}
-
-export interface CameraPickerOptions {
-  cameraFacing?: CameraFacing;
-  aspectRatio?: AspectRatio;
-  initialZoom?: number;
-  showGrid?: boolean;
-  timerSeconds?: 0 | 3 | 10;
-  quality?: number;
-  includeExif?: boolean;
-  performanceMode?: PerformanceMode;
-  maxResolution?: { width: number; height: number };
-}
-
-export interface CameraCaptureResult {
+export interface CameraPickerResult {
+  /** Local file URI (file://...) */
   uri: string;
-  width?: number;
-  height?: number;
-  exif?: Record<string, unknown>;
-  filters?: FilterValues;
-  presetId?: string;
+  /** Error message if capture failed */
+  error: null;
 }
 
-export interface SupportedFeatures {
-  flash: boolean;
-  torch: boolean;
-  focus: boolean;
-  exposure: boolean;
-  ultraWide: boolean;
-  filters: boolean;
-  horizonGuide: boolean;
+export interface CameraPickerError {
+  uri: null;
+  /** Error message */
+  error: string;
 }
 
-export interface CameraPickerContextValue {
-  isOpen: boolean;
-  isCapturing: boolean;
-  result: CameraCaptureResult | null;
-  error: string | null;
-  options: CameraPickerOptions;
-  supportedFeatures: SupportedFeatures;
-  openCamera: (options?: CameraPickerOptions) => void;
-  closeCamera: () => void;
-  setCapturing: (value: boolean) => void;
-  setResult: (result: CameraCaptureResult | null) => void;
-  setError: (error: string | null) => void;
-  setSupportedFeatures: (features: SupportedFeatures) => void;
+export interface CameraPickerCancelled {
+  uri: null;
+  error: null;
+}
+
+export type CameraPickerResponse =
+  | CameraPickerResult
+  | CameraPickerError
+  | CameraPickerCancelled;
+
+export interface CameraPickerConfig {
+  /** Accent color for shutter ring and icon tints (default: '#FFFFFF') */
+  accentColor?: string;
 }
 
 export interface CameraImagePickerProviderProps {
   children: React.ReactNode;
-  defaultOptions?: CameraPickerOptions;
-  onOpen?: () => void;
-  onCancel?: () => void;
-  onCapture?: (result: CameraCaptureResult) => void;
-  onError?: (error: string) => void;
+  /** Accent color for shutter ring and icon tints (default: '#FFFFFF') */
+  accentColor?: string;
 }
 
-export interface CameraViewProps {
-  onClose: () => void;
-  onCapture: (result: CameraCaptureResult) => void;
-  options: CameraPickerOptions;
-  setCapturing: (value: boolean) => void;
-  setError: (error: string | null) => void;
-  setSupportedFeatures: (features: SupportedFeatures) => void;
-  style?: StyleProp<ViewStyle>;
+export interface CameraPickerContextValue {
+  openCamera: () => Promise<CameraPickerResponse>;
+  accentColor: string;
 }

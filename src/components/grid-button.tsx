@@ -1,7 +1,8 @@
-import React, { useMemo } from 'react';
-import { Pressable, StyleSheet } from 'react-native';
-import { getContrastColor } from '../utils/contrast-color';
-import { GridIcon } from './icons';
+import React, { useMemo } from "react";
+import { Pressable, StyleSheet } from "react-native";
+
+import { GridIcon } from "./icons";
+import { getContrastColor } from "../utils/contrast-color";
 
 interface GridButtonProps {
   showGrid: boolean;
@@ -12,10 +13,13 @@ interface GridButtonProps {
 export function GridButton({
   showGrid,
   onToggle,
-  accentColor = '#FFFFFF',
+  accentColor = "#FFFFFF",
 }: GridButtonProps) {
-  const contrastColor = useMemo(() => getContrastColor(accentColor), [accentColor]);
-  const iconColor = showGrid ? contrastColor : '#FFFFFF';
+  const contrastColor = useMemo(
+    () => getContrastColor(accentColor),
+    [accentColor],
+  );
+  const iconColor = showGrid ? contrastColor : "#FFFFFF";
 
   return (
     <Pressable
@@ -25,7 +29,7 @@ export function GridButton({
         showGrid ? { backgroundColor: accentColor } : styles.buttonInactive,
       ]}
       accessibilityRole="button"
-      accessibilityLabel={`Grid: ${showGrid ? 'on' : 'off'}`}
+      accessibilityLabel={`Grid: ${showGrid ? "on" : "off"}`}
       accessibilityState={{ selected: showGrid }}
     >
       <GridIcon size={18} color={iconColor} />
@@ -38,10 +42,10 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 20,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
   },
   buttonInactive: {
-    backgroundColor: 'rgba(255,255,255,0.15)',
+    backgroundColor: "rgba(255,255,255,0.15)",
   },
 });

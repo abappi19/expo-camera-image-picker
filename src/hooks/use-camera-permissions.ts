@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
-import { useCameraPermission } from 'react-native-vision-camera';
+import { useEffect, useState } from "react";
+import { useCameraPermission } from "react-native-vision-camera";
 
 export interface CameraPermissionState {
   hasPermission: boolean;

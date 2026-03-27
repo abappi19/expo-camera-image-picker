@@ -14,11 +14,7 @@ export default function RootLayout() {
   const colorScheme = useColorScheme();
 
   return (
-    <CameraImagePickerProvider
-      onCapture={(result) => console.log('Captured:', result.uri)}
-      onError={(error) => console.warn('Camera error:', error)}
-      onCancel={() => console.log('Camera cancelled')}
-    >
+    <CameraImagePickerProvider accentColor="#007AFF">
       <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
         <Stack>
           <Stack.Screen name="(tabs)" options={{ headerShown: false }} />

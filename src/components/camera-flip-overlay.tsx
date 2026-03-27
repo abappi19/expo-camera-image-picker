@@ -1,12 +1,13 @@
-import React from 'react';
-import { StyleSheet } from 'react-native';
+import React from "react";
+import { StyleSheet } from "react-native";
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
   withDelay,
   withTiming,
-} from 'react-native-reanimated';
-import { CameraSwitchIcon } from './icons';
+} from "react-native-reanimated";
+
+import { CameraSwitchIcon } from "./icons";
 
 const HOLD_DURATION = 600;
 const FADE_DURATION = 400;
@@ -36,20 +37,20 @@ export function useCameraFlip() {
 
 interface CameraFlipOverlayProps {
   accentColor?: string;
-  isVisible: ReturnType<typeof useCameraFlip>['isVisible'];
-  opacity: ReturnType<typeof useCameraFlip>['opacity'];
-  iconRotation: ReturnType<typeof useCameraFlip>['iconRotation'];
+  isVisible: ReturnType<typeof useCameraFlip>["isVisible"];
+  opacity: ReturnType<typeof useCameraFlip>["opacity"];
+  iconRotation: ReturnType<typeof useCameraFlip>["iconRotation"];
 }
 
 export function CameraFlipOverlayView({
-  accentColor = '#FFFFFF',
+  accentColor = "#FFFFFF",
   isVisible,
   opacity,
   iconRotation,
 }: CameraFlipOverlayProps) {
   const containerStyle = useAnimatedStyle(() => ({
     opacity: opacity.value,
-    display: isVisible.value ? 'flex' : 'none',
+    display: isVisible.value ? "flex" : "none",
   }));
 
   const iconStyle = useAnimatedStyle(() => ({
@@ -57,7 +58,10 @@ export function CameraFlipOverlayView({
   }));
 
   return (
-    <Animated.View style={[styles.overlay, containerStyle]} pointerEvents="none">
+    <Animated.View
+      style={[styles.overlay, containerStyle]}
+      pointerEvents="none"
+    >
       <Animated.View style={iconStyle}>
         <CameraSwitchIcon size={64} color={accentColor} />
       </Animated.View>
@@ -68,9 +72,9 @@ export function CameraFlipOverlayView({
 const styles = StyleSheet.create({
   overlay: {
     ...StyleSheet.absoluteFillObject,
-    backgroundColor: 'rgba(0,0,0,0.85)',
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: "rgba(0,0,0,0.85)",
+    alignItems: "center",
+    justifyContent: "center",
     zIndex: 20,
   },
 });

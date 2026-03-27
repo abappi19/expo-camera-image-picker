@@ -1,10 +1,5 @@
-import React from 'react';
-import {
-  Pressable,
-  View,
-  ActivityIndicator,
-  StyleSheet,
-} from 'react-native';
+import React from "react";
+import { Pressable, View, ActivityIndicator, StyleSheet } from "react-native";
 
 interface ShutterButtonProps {
   onPress: () => void;
@@ -21,7 +16,7 @@ export function ShutterButton({
   onPress,
   disabled = false,
   isCapturing = false,
-  accentColor = '#FFFFFF',
+  accentColor = "#FFFFFF",
 }: ShutterButtonProps) {
   return (
     <Pressable
@@ -51,9 +46,9 @@ const styles = StyleSheet.create({
     height: OUTER_SIZE,
     borderRadius: OUTER_SIZE / 2,
     borderWidth: BORDER_WIDTH,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: 'transparent',
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "transparent",
   },
   outerPressed: {
     opacity: 0.7,

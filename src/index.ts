@@ -1,37 +1,33 @@
-// camera-picker module
+// expo-camera-image-picker
 // Standalone, npm-publishable camera UI module
 // Zero dependency on app business logic (no NativeWind, no gluestack, no @features/*)
 // All styling via plain StyleSheet.create()
 
-// Provider & Modal (wrapper layer)
-export { CameraImagePickerProvider } from './provider/CameraImagePickerProvider';
-export { useCameraImagePicker } from './hooks/useCameraImagePicker';
-export { CameraImagePickerModal } from './components/CameraModal';
+// Provider & Hook (public API)
+export { CameraImagePickerProvider } from "./provider/CameraImagePickerProvider";
+export { useCameraImagePicker } from "./hooks/useCameraImagePicker";
 
-// Core components
-export { CameraView } from './components/camera-view';
-export { ShutterButton } from './components/shutter-button';
-export { AspectRatioSelector } from './components/aspect-ratio-selector';
-export { ZoomSelector } from './components/zoom-selector';
-export { FlashButton } from './components/flash-button';
-export { GridButton } from './components/grid-button';
-export { CameraGridOverlay } from './components/camera-grid-overlay';
+// Core components (for custom camera UIs)
+export { CameraView } from "./components/camera-view";
+export { ShutterButton } from "./components/shutter-button";
+export { AspectRatioSelector } from "./components/aspect-ratio-selector";
+export { ZoomSelector } from "./components/zoom-selector";
+export { FlashButton } from "./components/flash-button";
+export { GridButton } from "./components/grid-button";
+export { CameraGridOverlay } from "./components/camera-grid-overlay";
 
-// Types from reference camera.types
-export type { CameraViewProps, CaptureResult } from './types/camera.types';
-
-// Types from extended types
+// Types
+export type { CameraViewProps, CaptureResult } from "./types/camera.types";
 export type {
   AspectRatio,
-  CameraCaptureResult,
   CameraFacing,
-  CameraPickerOptions,
-  FilterPreset,
-  FilterValues,
+  CameraImagePickerProviderProps,
+  CameraPickerCancelled,
+  CameraPickerConfig,
+  CameraPickerContextValue,
+  CameraPickerError,
+  CameraPickerResponse,
+  CameraPickerResult,
   FlashMode,
-  PerformanceMode,
-  SupportedFeatures,
-} from './types';
-
-// Hook types
-export type { ZoomLevel } from './hooks/use-zoom';
+} from "./types";
+export type { ZoomLevel } from "./hooks/use-zoom";

@@ -1,5 +1,5 @@
-import { useCallback } from 'react';
-import * as ImagePicker from 'expo-image-picker';
+import * as ImagePicker from "expo-image-picker";
+import { useCallback } from "react";
 
 export interface GalleryPickerState {
   pickFromGallery: () => Promise<string[] | null>;
@@ -8,13 +8,13 @@ export interface GalleryPickerState {
 export function useGalleryPicker(): GalleryPickerState {
   const pickFromGallery = useCallback(async (): Promise<string[] | null> => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-    if (status !== 'granted') {
+    if (status !== "granted") {
       return null;
     }
 
     const result = await ImagePicker.launchImageLibraryAsync({
       allowsMultipleSelection: true,
-      mediaTypes: ['images'],
+      mediaTypes: ["images"],
     });
 
     if (result.canceled || !result.assets || result.assets.length === 0) {

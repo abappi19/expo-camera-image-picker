@@ -1,38 +1,31 @@
 import { useState } from 'react';
 import { Image, Pressable, ScrollView, StyleSheet, View } from 'react-native';
-import { useCameraImagePicker, CameraImagePickerModal } from 'expo-camera-image-picker';
-import type { CameraCaptureResult, CameraPickerOptions } from 'expo-camera-image-picker';
+import { useCameraImagePicker } from 'expo-camera-image-picker';
+import type { CameraPickerResult } from 'expo-camera-image-picker';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 
-const PRESETS: { label: string; options: CameraPickerOptions }[] = [
-  { label: 'Default', options: {} },
-  { label: 'Front', options: { cameraFacing: 'front' } },
-  { label: '1:1', options: { aspectRatio: '1:1' } },
-  { label: '16:9', options: { aspectRatio: '16:9' } },
-  { label: 'Grid', options: { showGrid: true } },
-  { label: 'Quality', options: { performanceMode: 'quality' } },
-  { label: 'Speed', options: { performanceMode: 'speed' } },
-  { label: '3s Timer', options: { timerSeconds: 3 } },
-  { label: 'EXIF', options: { includeExif: true } },
-];
-
 export default function CameraScreen() {
-  const { openCamera, result, isCapturing, error } = useCameraImagePicker();
-  const [captures, setCaptures] = useState<CameraCaptureResult[]>([]);
+  const { openCamera } = useCameraImagePicker();
+  const [captures, setCaptures] = useState<CameraPickerResult[]>([]);
+  const [lastError, setLastError] = useState<string | null>(null);
   const colorScheme = useColorScheme();
   const isDark = colorScheme === 'dark';
 
-  const handleOpen = (options: CameraPickerOptions) => {
-    openCamera(options);
+  const handleOpen = async () => {
+    setLastError(null);
+    const response = await openCamera();
+
+    if (response.error) {
+      setLastError(response.error);
+    } else if (response.uri) {
+      setCaptures((prev) => [response, ...prev]);
+    }
+    // uri === null && error === null means cancelled
   };
 
-  // Track captures locally (provider onCapture fires globally in _layout)
-  const latestUri = result?.uri;
-  if (latestUri && !captures.some((c) => c.uri === latestUri)) {
-    setCaptures((prev) => [result, ...prev]);
-  }
+  const latestCapture = captures[0] ?? null;
 
   return (
     <ThemedView style={styles.container}>
@@ -41,39 +34,24 @@ export default function CameraScreen() {
           Camera Picker
         </ThemedText>
 
-        {error && <ThemedText style={styles.error}>{error}</ThemedText>}
-        {isCapturing && <ThemedText style={styles.status}>Capturing...</ThemedText>}
+        {lastError && <ThemedText style={styles.error}>{lastError}</ThemedText>}
 
-        <ThemedText type="subtitle" style={styles.sectionLabel}>
-          Open with preset
-        </ThemedText>
+        <Pressable
+          onPress={handleOpen}
+          style={[
+            styles.openButton,
+            { backgroundColor: isDark ? '#1c1c1e' : '#f2f2f7', borderColor: isDark ? '#333' : '#ddd' },
+          ]}
+        >
+          <ThemedText style={styles.openButtonText}>Open Camera</ThemedText>
+        </Pressable>
 
-        <View style={styles.presetGrid}>
-          {PRESETS.map((preset) => (
-            <Pressable
-              key={preset.label}
-              onPress={() => handleOpen(preset.options)}
-              style={[
-                styles.presetButton,
-                { backgroundColor: isDark ? '#1c1c1e' : '#f2f2f7', borderColor: isDark ? '#333' : '#ddd' },
-              ]}
-            >
-              <ThemedText style={styles.presetText}>{preset.label}</ThemedText>
-            </Pressable>
-          ))}
-        </View>
-
-        {result && (
+        {latestCapture && (
           <View style={styles.resultCard}>
             <ThemedText type="subtitle" style={styles.sectionLabel}>
               Last Capture
             </ThemedText>
-            <Image source={{ uri: result.uri }} style={styles.preview} />
-            <ThemedText style={styles.meta}>
-              {result.width ?? '?'}x{result.height ?? '?'}
-              {result.presetId ? ` · ${result.presetId}` : ''}
-              {result.filters ? ` · brightness ${result.filters.brightness}` : ''}
-            </ThemedText>
+            <Image source={{ uri: latestCapture.uri }} style={styles.preview} />
           </View>
         )}
 
@@ -90,8 +68,6 @@ export default function CameraScreen() {
           </View>
         )}
       </ScrollView>
-
-      <CameraImagePickerModal />
     </ThemedView>
   );
 }
@@ -112,28 +88,21 @@ const styles = StyleSheet.create({
     color: '#ff3b30',
     marginBottom: 8,
   },
-  status: {
-    color: '#ff9500',
-    marginBottom: 8,
-  },
   sectionLabel: {
     marginBottom: 12,
     marginTop: 8,
   },
-  presetGrid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: 8,
+  openButton: {
+    paddingHorizontal: 20,
+    paddingVertical: 14,
+    borderRadius: 12,
+    borderWidth: 1,
+    alignItems: 'center',
     marginBottom: 24,
   },
-  presetButton: {
-    paddingHorizontal: 14,
-    paddingVertical: 10,
-    borderRadius: 10,
-    borderWidth: 1,
-  },
-  presetText: {
-    fontSize: 14,
+  openButtonText: {
+    fontSize: 16,
+    fontWeight: '600',
   },
   resultCard: {
     marginBottom: 24,
@@ -143,10 +112,6 @@ const styles = StyleSheet.create({
     height: 220,
     borderRadius: 12,
     marginBottom: 8,
-  },
-  meta: {
-    fontSize: 12,
-    opacity: 0.5,
   },
   gallery: {
     gap: 8,

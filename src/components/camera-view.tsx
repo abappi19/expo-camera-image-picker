@@ -123,15 +123,20 @@ export function CameraView({
       }
     } else if (onGalleryPress) {
       onGalleryPress();
+    } else {
+      const uris = await pickFromGallery();
+      if (uris?.[0]) {
+        onCapture(uris[0]);
+      }
     }
-  }, [onGallerySelect, onGalleryPress, pickFromGallery, onClose]);
+  }, [onGallerySelect, onGalleryPress, onCapture, pickFromGallery, onClose]);
 
   const handleCameraSwap = useCallback(() => {
     cameraFlip.trigger();
     setCameraPosition((prev) => (prev === "back" ? "front" : "back"));
   }, [cameraFlip]);
 
-  const showGalleryButton = !!(onGallerySelect || onGalleryPress);
+  const showGalleryButton = true;
 
   const isCameraReady = hasPermission && !permissionLoading && !!device;
 

@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import Animated, { FadeIn, FadeOut } from "react-native-reanimated";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import type { CameraPosition } from "react-native-vision-camera";
 import { useCameraDevice } from "react-native-vision-camera";
 
@@ -68,6 +68,7 @@ export function CameraView({
   const { frameWidth, frameHeight } = useAspectRatioLayout(selectedRatio);
   const ratioTransition = useRatioTransition();
   const cameraFlip = useCameraFlip();
+  const insets = useSafeAreaInsets();
   const [ratioExpanded, setRatioExpanded] = useState(false);
   const [flashExpanded, setFlashExpanded] = useState(false);
 
@@ -141,11 +142,13 @@ export function CameraView({
   const isCameraReady = hasPermission && !permissionLoading && !!device;
 
   return (
-    <SafeAreaView
+    <View
       style={[styles.container, !isCameraReady && styles.centerContent, style]}
     >
       {permissionLoading ? (
-        <Text style={styles.messageText}>Requesting camera access...</Text>
+        <Text style={[styles.messageText, { marginTop: insets.top }]}>
+          Requesting camera access...
+        </Text>
       ) : !hasPermission ? (
         <>
           <View style={styles.iconContainer}>
@@ -207,11 +210,11 @@ export function CameraView({
                 photo
                 torch={torchEnabled ? "on" : "off"}
                 animatedProps={animatedZoomProps}
-                resizeMode="contain"
+                resizeMode="cover"
               />
               {showGrid && <CameraGridOverlay />}
             </View>
-            <View style={styles.topBar}>
+            <View style={[styles.topBar, { paddingTop: insets.top }]}>
               <View style={styles.topBarContainer}>
                 <Pressable
                   onPress={onClose}
@@ -264,7 +267,12 @@ export function CameraView({
               />
             </View>
 
-            <View style={styles.bottomBarAbsolute}>
+            <View
+              style={[
+                styles.bottomBarAbsolute,
+                { paddingBottom: insets.bottom },
+              ]}
+            >
               <View style={styles.bottomControls}>
                 <View style={styles.sideButton}>
                   {showGalleryButton && (
@@ -302,7 +310,7 @@ export function CameraView({
           </View>
         </>
       )}
-    </SafeAreaView>
+    </View>
   );
 }
 
@@ -347,7 +355,7 @@ const styles = StyleSheet.create({
   },
   zoomBar: {
     position: "absolute",
-    bottom: 120,
+    bottom: 138,
     left: 0,
     right: 0,
     flexDirection: "row",

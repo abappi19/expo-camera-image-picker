@@ -13,7 +13,8 @@
       "infoPlist": {
         "NSPhotoLibraryUsageDescription": "Allow $(PRODUCT_NAME) to access your photo library",
         "NSCameraUsageDescription": "Allow $(PRODUCT_NAME) to use the camera"
-      }
+      },
+      "bundleIdentifier": "com.abappi19.example.xyz"
     },
     "android": {
       "adaptiveIcon": {
@@ -25,7 +26,6 @@
       "edgeToEdgeEnabled": true,
       "predictiveBackGestureEnabled": false,
       "permissions": [
-        "android.permission.CAMERA",
         "android.permission.CAMERA"
       ],
       "package": "com.abappi19.example"
@@ -59,6 +59,12 @@
     "experiments": {
       "typedRoutes": true,
       "reactCompiler": true
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "18379085-7810-4f07-8de5-6acb01f91c04"
+      }
     }
   }
 }

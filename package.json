@@ -2,39 +2,95 @@
   "name": "expo-camera-image-picker",
   "version": "0.1.0",
   "description": "Custom camera modal and picker controls for Expo apps using react-native-vision-camera",
-  "main": "src/index.ts",
-  "types": "src/index.ts",
+  "main": "build/index.js",
+  "types": "build/index.d.ts",
+  "files": [
+    "build/**/*",
+    "src/**/*"
+  ],
+  "type": "module",
   "sideEffects": false,
   "license": "MIT",
   "author": "Abappi19 <abappi19@gmail.com> (https://abappi19.github.io)",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/abappi19/expo-camera-image-picker.git"
+  },
+  "bugs": {
+    "url": "https://github.com/abappi19/expo-camera-image-picker/issues"
+  },
+  "homepage": "https://github.com/abappi19/expo-camera-image-picker#readme",
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/"
+  },
+  "keywords": [
+    "react-native",
+    "expo",
+    "expo-camera-image-picker",
+    "camera",
+    "image-picker",
+    "vision-camera",
+    "react-native-vision-camera",
+    "ios",
+    "android"
+  ],
   "scripts": {
+    "build": "expo-module build",
+    "lint": "expo-module lint -- --fix",
+    "test": "jest",
     "typecheck": "tsc --noEmit",
-    "test": "jest"
+    "open:ios": "xed example/ios",
+    "open:android": "open -a \"Android Studio\" example/android",
+    "prepare": "expo-module build && husky",
+    "commit": "commit"
+  },
+  "eslintConfig": {
+    "extends": "universe/native"
   },
   "peerDependencies": {
     "expo": "*",
-    "react": ">=18",
-    "react-native": ">=0.74",
-    "react-native-reanimated": ">=3",
-    "react-native-safe-area-context": ">=4",
-    "react-native-vision-camera": ">=4",
+    "react": "*",
+    "react-native": "*",
+    "react-native-reanimated": "*",
+    "react-native-safe-area-context": "*",
+    "react-native-vision-camera": "*",
     "react-native-svg": "*",
-    "expo-image-picker": ">=17"
+    "expo-image-picker": "*"
   },
-  "dependencies": {},
+  "peerDependenciesMeta": {
+    "@types/react": {
+      "optional": true
+    },
+    "@types/react-native": {
+      "optional": true
+    }
+  },
   "devDependencies": {
+    "@commitlint/cli": "^19.5.0",
+    "@commitlint/config-conventional": "^19.5.0",
+    "@commitlint/cz-commitlint": "^19.5.0",
+    "@commitlint/prompt-cli": "^19.5.0",
+    "@eslint/eslintrc": "^3.1.0",
+    "@eslint/js": "^9.12.0",
+    "@testing-library/react-native": "^13.2.0",
     "@types/jest": "^29.5.14",
     "@types/react": "^19.2.2",
     "@types/react-test-renderer": "^19.1.0",
+    "eslint": "8",
+    "eslint-config-universe": "^13.0.0",
     "expo": "^55.0.8",
+    "expo-image-picker": "^17.0.8",
+    "expo-module-scripts": "^3.5.2",
+    "expo-modules-core": "^1.12.24",
+    "husky": "^9.1.6",
     "jest": "^29.7.0",
+    "prettier": "^3.3.3",
     "react": "^19.2.4",
     "react-native": "^0.84.1",
     "react-native-reanimated": "^4.3.0",
     "react-native-safe-area-context": "^5.7.0",
-    "react-native-vision-camera": "^4.7.3",
-    "expo-image-picker": "^17.0.8",
     "react-native-svg": "^15.15.4",
+    "react-native-vision-camera": "^4.7.3",
     "react-test-renderer": "^19.2.0",
     "ts-jest": "^29.2.5",
     "typescript": "^5.6.3"

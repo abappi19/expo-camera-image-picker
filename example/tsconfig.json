@@ -5,6 +5,9 @@
     "paths": {
       "@/*": [
         "./*"
+      ],
+      "expo-camera-image-picker": [
+        "../src/index"
       ]
     },
     "skipLibCheck": true

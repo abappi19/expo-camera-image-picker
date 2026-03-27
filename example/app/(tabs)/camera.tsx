@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Image, Pressable, ScrollView, StyleSheet, View } from 'react-native';
-import { useCameraImagePicker, CameraImagePickerModal } from '../../../src';
-import type { CameraCaptureResult, CameraPickerOptions } from '../../../src';
+import { useCameraImagePicker, CameraImagePickerModal } from 'expo-camera-image-picker';
+import type { CameraCaptureResult, CameraPickerOptions } from 'expo-camera-image-picker';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { useColorScheme } from '@/hooks/use-color-scheme';

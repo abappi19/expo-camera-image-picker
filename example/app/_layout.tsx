@@ -2,7 +2,7 @@ import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import 'react-native-reanimated';
-import { CameraImagePickerProvider } from '../../src';
+import { CameraImagePickerProvider } from 'expo-camera-image-picker';
 
 import { useColorScheme } from '@/hooks/use-color-scheme';
 

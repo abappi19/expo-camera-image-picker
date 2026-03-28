@@ -3541,6 +3541,11 @@ expo-asset@~12.0.12:
     "@expo/image-utils" "^0.8.8"
     expo-constants "~18.0.12"
 
+expo-camera-image-picker@^1.1.1:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/expo-camera-image-picker/-/expo-camera-image-picker-1.1.1.tgz#1002622e0692b01199f34870218654aebf759696"
+  integrity sha512-/l3fCIhclw8eVfqsSzzTryvjBPM3kmg6ps9arknstbhjYN0hFNAyubGKubdZ3LkrRCb529TKQ2pKHE1B1PfEyw==
+
 expo-constants@~18.0.12, expo-constants@~18.0.13:
   version "18.0.13"
   resolved "https://registry.npmjs.org/expo-constants/-/expo-constants-18.0.13.tgz"

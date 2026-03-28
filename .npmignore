@@ -1,0 +1,26 @@
+# Source & dev tooling (build/ and src/ are included via "files" in package.json)
+example/
+.changeset/
+.github/
+.husky/
+.vscode/
+
+# Config files
+tsconfig.json
+commitlint.config.js
+jest.config.*
+.eslintrc*
+.prettierrc*
+.editorconfig
+
+# Docs & meta
+CHANGELOG.md
+CLAUDE.md
+*.md
+!README.md
+
+# Dev artifacts
+*.tsbuildinfo
+.DS_Store
+*.log
+coverage/

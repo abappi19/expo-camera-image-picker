@@ -20,10 +20,19 @@ A custom camera modal and image picker for Expo apps, built on [`react-native-vi
 ## Installation
 
 ```bash
+# npm
 npm install expo-camera-image-picker
+
+# yarn
+yarn add expo-camera-image-picker
+
+# pnpm
+pnpm add expo-camera-image-picker
 ```
 
 ### Peer Dependencies
+
+Install the required peer dependencies using Expo's version resolver:
 
 ```bash
 npx expo install react-native-vision-camera react-native-reanimated react-native-safe-area-context react-native-svg expo-image-picker
@@ -368,12 +377,12 @@ The example shows provider setup in the root layout, opening the camera with `aw
 ## Development
 
 ```bash
-npm install          # install dependencies
-npm run typecheck    # TypeScript static analysis
-npm run lint         # ESLint with auto-fix
-npm run format       # ESLint format
-npm test             # run Jest tests
-npm run build        # build with expo-module
+yarn install          # install dependencies
+yarn typecheck        # TypeScript static analysis
+yarn lint             # ESLint with auto-fix
+yarn format           # ESLint format
+yarn test             # run Jest tests
+yarn build            # build with expo-module
 ```
 
 ## License

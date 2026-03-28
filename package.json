@@ -43,20 +43,26 @@
     "open:ios": "xed example/ios",
     "open:android": "open -a \"Android Studio\" example/android",
     "prepare": "expo-module build && husky",
-    "commit": "commit"
+    "commit": "commit",
+    "release": "changeset",
+    "release:version": "changeset version",
+    "release:publish": "changeset publish",
+    "release:add": "changeset add",
+    "release:status": "changeset status",
+    "release:tag": "changeset tag"
   },
   "eslintConfig": {
     "extends": "universe/native"
   },
   "peerDependencies": {
     "expo": "*",
+    "expo-image-picker": "*",
     "react": "*",
     "react-native": "*",
     "react-native-reanimated": "*",
     "react-native-safe-area-context": "*",
-    "react-native-vision-camera": "*",
     "react-native-svg": "*",
-    "expo-image-picker": "*"
+    "react-native-vision-camera": "*"
   },
   "peerDependenciesMeta": {
     "@types/react": {
@@ -67,6 +73,7 @@
     }
   },
   "devDependencies": {
+    "@changesets/cli": "^2.30.0",
     "@commitlint/cli": "^19.5.0",
     "@commitlint/config-conventional": "^19.5.0",
     "@commitlint/cz-commitlint": "^19.5.0",

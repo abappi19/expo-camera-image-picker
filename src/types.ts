@@ -30,13 +30,25 @@ export interface CameraPickerConfig {
   accentColor?: string;
 }
 
+/**
+ * Configuration for simulator camera mock. Only used on iOS simulator.
+ * @param onMockCapture - Callback to handle the captured image.
+ * @returns The saved path of the captured image.
+ */
+export interface SimulatorConfig {
+  onMockCapture: (base64: string) => Promise<string>; // The saved path of the captured image.
+}
+
 export interface CameraImagePickerProviderProps {
   children: React.ReactNode;
   /** Accent color for shutter ring and icon tints (default: '#FFFFFF') */
   accentColor?: string;
+  /** Configuration for simulator camera mock. Only used on iOS simulator. */
+  simulatorConfig?: SimulatorConfig;
 }
 
 export interface CameraPickerContextValue {
   openCamera: () => Promise<CameraPickerResponse>;
   accentColor: string;
+  simulatorConfig?: SimulatorConfig;
 }

@@ -1,5 +1,5 @@
 import { useState, useCallback, useMemo } from "react";
-import type { CameraDevice } from "react-native-vision-camera";
+import type { CameraDevice } from "../components/vision-camera";
 
 export type FlashMode = "off" | "on" | "auto" | "torch";
 

@@ -31,6 +31,7 @@ export type {
   CameraPickerResponse,
   CameraPickerResult,
   FlashMode,
+  SimulatorConfig,
 } from "./types";
 export type { ZoomLevel } from "./hooks/use-zoom";
 export type {

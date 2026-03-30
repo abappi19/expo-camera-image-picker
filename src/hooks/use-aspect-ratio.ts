@@ -1,9 +1,6 @@
 import { useState } from "react";
-import type {
-  CameraDevice,
-  CameraDeviceFormat,
-} from "react-native-vision-camera";
-import { useCameraFormat } from "react-native-vision-camera";
+import type { CameraDevice, CameraDeviceFormat } from "../components/vision-camera";
+import { useCameraFormat } from "../components/vision-camera";
 
 export type AspectRatio = "16:9" | "4:3" | "1:1";
 

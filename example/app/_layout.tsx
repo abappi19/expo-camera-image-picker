@@ -14,7 +14,13 @@ export default function RootLayout() {
   const colorScheme = useColorScheme();
 
   return (
-    <CameraImagePickerProvider accentColor="#007AFF">
+    <CameraImagePickerProvider accentColor="#007AFF" simulatorConfig={{
+      onMockCapture(base64): Promise<string> {
+        console.log("onMockCapture", base64);
+
+        return Promise.resolve("text/path");
+      },
+    }}>
       <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
         <Stack>
           <Stack.Screen name="(tabs)" options={{ headerShown: false }} />

@@ -2,8 +2,8 @@ import { useCallback, useRef, useState } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import Animated, { FadeIn, FadeOut } from "react-native-reanimated";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import type { CameraPosition } from "react-native-vision-camera";
-import { useCameraDevice } from "react-native-vision-camera";
+import type { CameraPosition } from "./vision-camera";
+import { useCameraDevice } from "./vision-camera";
 
 import { useAspectRatioLayout } from "./aspect-ratio-frame";
 import { AspectRatioSelector } from "./aspect-ratio-selector";
@@ -185,30 +185,6 @@ export function CameraView({
               Grant Permission
             </Text>
           </Pressable>
-          <Pressable onPress={onClose} style={styles.closeButtonCenter}>
-            <Text style={styles.closeButtonText}>Close</Text>
-          </Pressable>
-        </>
-      ) : !device ? (
-        <>
-          <View style={styles.iconContainer}>
-            <CameraIcon size={64} color="#FFFFFF" />
-          </View>
-          <Text style={styles.messageText}>
-            Camera unavailable in simulator
-          </Text>
-          <Text style={styles.subMessageText}>
-            Use Gallery to select photos
-          </Text>
-          {showGalleryButton && (
-            <Pressable
-              onPress={handleGalleryPress}
-              style={styles.iconButton}
-              accessibilityLabel="Open gallery"
-            >
-              <ImageIcon size={24} color={accentColor} />
-            </Pressable>
-          )}
           <Pressable onPress={onClose} style={styles.closeButtonCenter}>
             <Text style={styles.closeButtonText}>Close</Text>
           </Pressable>

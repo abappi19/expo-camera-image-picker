@@ -4,7 +4,7 @@ import {
   useAnimatedProps,
   withTiming,
 } from "react-native-reanimated";
-import type { CameraProps } from "react-native-vision-camera";
+import type { CameraProps } from "../components/vision-camera";
 
 const ZOOM_ANIMATION_DURATION = 300;
 

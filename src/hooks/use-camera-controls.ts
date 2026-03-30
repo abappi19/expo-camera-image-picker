@@ -1,10 +1,10 @@
 import { useRef, useState, useCallback } from "react";
-import { Camera } from "react-native-vision-camera";
+import { Camera, type CameraType } from "../components/vision-camera";
 
 import type { CaptureResult } from "../types/camera.types";
 
 export function useCameraControls() {
-  const cameraRef = useRef<Camera>(null);
+  const cameraRef = useRef<CameraType>(null);
   const [isCapturing, setIsCapturing] = useState(false);
 
   const capture = useCallback(

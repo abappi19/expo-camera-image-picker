@@ -1,6 +1,6 @@
 import { useCallback, useRef, useState } from "react";
 import type { GestureResponderEvent } from "react-native";
-import type { Camera } from "react-native-vision-camera";
+import type { CameraType as Camera } from "../components/vision-camera";
 
 export interface FocusPoint {
   x: number;

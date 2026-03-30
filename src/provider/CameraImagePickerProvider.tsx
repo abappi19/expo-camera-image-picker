@@ -1,10 +1,4 @@
-import React, {
-  createContext,
-  useCallback,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import React, { useCallback, useMemo, useRef, useState } from "react";
 import { Modal } from "react-native";
 
 import { CameraView } from "../components/camera-view";
@@ -13,15 +7,16 @@ import type {
   CameraPickerContextValue,
   CameraPickerResponse,
 } from "../types";
+import { CameraImagePickerContext } from "./context";
+
+export { CameraImagePickerContext } from "./context";
 
 const DEFAULT_ACCENT_COLOR = "#FFFFFF";
-
-export const CameraImagePickerContext =
-  createContext<CameraPickerContextValue | null>(null);
 
 export function CameraImagePickerProvider({
   children,
   accentColor = DEFAULT_ACCENT_COLOR,
+  simulatorConfig,
 }: CameraImagePickerProviderProps) {
   const [isOpen, setIsOpen] = useState(false);
   const resolveRef = useRef<((response: CameraPickerResponse) => void) | null>(
@@ -48,8 +43,8 @@ export function CameraImagePickerProvider({
   }, []);
 
   const value = useMemo<CameraPickerContextValue>(
-    () => ({ openCamera, accentColor }),
-    [openCamera, accentColor],
+    () => ({ openCamera, accentColor, simulatorConfig }),
+    [openCamera, accentColor, simulatorConfig],
   );
 
   return (

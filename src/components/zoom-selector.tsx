@@ -9,6 +9,8 @@ interface ZoomSelectorProps {
   onSelect: (zoom: ZoomLevel) => void;
   supportsUltraWide: boolean;
   accentColor?: string;
+  /** Non-null when pinch-zooming — shows custom zoom at end */
+  pinchZoomDisplay?: number | null;
 }
 
 const ZOOM_LEVELS: ZoomLevel[] = ["0.5x", "1.0x", "2.0x", "4.0x"];
@@ -20,20 +22,34 @@ const ZOOM_LABELS: Record<ZoomLevel, string> = {
   "4.0x": "4",
 };
 
+function formatPinchLabel(value: number): string {
+  if (value % 1 === 0) return `${value}`;
+  return value.toFixed(1);
+}
+
 export function ZoomSelector({
   selectedZoom,
   onSelect,
   supportsUltraWide,
   accentColor = "#FFFFFF",
+  pinchZoomDisplay,
 }: ZoomSelectorProps) {
   const contrastColor = useMemo(
     () => getContrastColor(accentColor),
     [accentColor],
   );
+
+  const isPinching = pinchZoomDisplay !== null && pinchZoomDisplay !== undefined;
+
+  // When pinching: hide 0.5x, show custom value at end
+  const visibleLevels = isPinching
+    ? ZOOM_LEVELS.filter((z) => z !== "0.5x")
+    : ZOOM_LEVELS;
+
   return (
     <View style={styles.container}>
-      {ZOOM_LEVELS.map((zoom) => {
-        const isActive = zoom === selectedZoom;
+      {visibleLevels.map((zoom) => {
+        const isActive = !isPinching && zoom === selectedZoom;
         const isDisabled = zoom === "0.5x" && !supportsUltraWide;
 
         return (
@@ -66,11 +82,18 @@ export function ZoomSelector({
                     : styles.labelInactive,
               ]}
             >
-              {ZOOM_LABELS[zoom]}
+              {ZOOM_LABELS[zoom]}{isActive ? "x" : ""}
             </Text>
           </Pressable>
         );
       })}
+      {isPinching && (
+        <View style={[styles.circle, { backgroundColor: accentColor }]}>
+          <Text style={[styles.label, { color: contrastColor }]}>
+            {formatPinchLabel(pinchZoomDisplay)}x
+          </Text>
+        </View>
+      )}
     </View>
   );
 }

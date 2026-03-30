@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import Animated, { FadeIn, FadeOut } from "react-native-reanimated";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -55,9 +55,20 @@ export function CameraView({
   } = useCameraPermissions();
   const { cameraRef, capture, isCapturing } = useCameraControls();
   const { selectedRatio, setSelectedRatio, format } = useAspectRatio(device);
-  const { selectedZoom, setSelectedZoom, zoomValue, supportsUltraWide } =
-    useZoom(device);
+  const {
+    selectedZoom,
+    zoomValue,
+    supportsUltraWide,
+    pinchZoomDisplay,
+    onPinchStart,
+    onPinchUpdate,
+    selectPreset,
+  } = useZoom(device);
   const animatedZoomProps = useAnimatedZoom(zoomValue);
+  const pinchRef = useRef<{ startDistance: number | null; didPinch: boolean }>({
+    startDistance: null,
+    didPinch: false,
+  });
   const {
     flashMode,
     setFlashMode,
@@ -85,7 +96,7 @@ export function CameraView({
         ratioTransition.initFrom(selectedRatio);
         ratioTransition.show(ratio);
         setSelectedRatio(ratio);
-        setSelectedZoom("1.0x");
+        selectPreset("1.0x");
         resetFlash();
       }
       setRatioExpanded(false);
@@ -93,7 +104,7 @@ export function CameraView({
     [
       selectedRatio,
       setSelectedRatio,
-      setSelectedZoom,
+      selectPreset,
       resetFlash,
       ratioTransition,
     ],
@@ -205,12 +216,48 @@ export function CameraView({
       ) : (
         <>
           <View style={styles.cameraWrapper}>
-            <Pressable
-              onPress={handleTap}
+            <View
               style={{
                 width: frameWidth,
                 height: frameHeight,
                 overflow: "hidden",
+              }}
+              onTouchStart={(e) => {
+                if (e.nativeEvent.touches.length >= 2) {
+                  const [t1, t2] = e.nativeEvent.touches;
+                  const dx = t1.pageX - t2.pageX;
+                  const dy = t1.pageY - t2.pageY;
+                  pinchRef.current.startDistance = Math.sqrt(dx * dx + dy * dy);
+                  pinchRef.current.didPinch = true;
+                  onPinchStart();
+                } else if (e.nativeEvent.touches.length === 1) {
+                  pinchRef.current.didPinch = false;
+                }
+              }}
+              onTouchMove={(e) => {
+                if (
+                  e.nativeEvent.touches.length >= 2 &&
+                  pinchRef.current.startDistance !== null
+                ) {
+                  const [t1, t2] = e.nativeEvent.touches;
+                  const dx = t1.pageX - t2.pageX;
+                  const dy = t1.pageY - t2.pageY;
+                  const currentDistance = Math.sqrt(dx * dx + dy * dy);
+                  const scale = currentDistance / pinchRef.current.startDistance;
+                  onPinchUpdate(scale);
+                }
+              }}
+              onTouchEnd={(e) => {
+                if (e.nativeEvent.touches.length < 2) {
+                  pinchRef.current.startDistance = null;
+                }
+                // Single tap → focus (only if no pinch happened during this gesture)
+                if (
+                  e.nativeEvent.touches.length === 0 &&
+                  !pinchRef.current.didPinch
+                ) {
+                  handleTap(e);
+                }
               }}
             >
               <ReanimatedCamera
@@ -229,7 +276,7 @@ export function CameraView({
               {focusPoint && (
                 <FocusIndicator point={focusPoint} accentColor={accentColor} />
               )}
-            </Pressable>
+            </View>
             <View style={[styles.topBar, { paddingTop: insets.top }]}>
               <View style={styles.topBarContainer}>
                 <Pressable
@@ -294,9 +341,10 @@ export function CameraView({
                   >
                     <ZoomSelector
                       selectedZoom={selectedZoom}
-                      onSelect={setSelectedZoom}
+                      onSelect={selectPreset}
                       supportsUltraWide={supportsUltraWide}
                       accentColor={accentColor}
+                      pinchZoomDisplay={pinchZoomDisplay}
                     />
                   </Animated.View>
                 )}

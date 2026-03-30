@@ -28,7 +28,10 @@ export function useAspectRatio(
 
   // Always request 4:3 (native sensor ratio) for best quality.
   // The selected aspect ratio is applied as a visual crop only.
-  const format = useCameraFormat(device, [{ photoAspectRatio: 4 / 3 }]);
+  const format = useCameraFormat(device, [
+    { photoAspectRatio: ratioValue },
+    { videoAspectRatio: ratioValue },
+  ]);
 
   return { selectedRatio, setSelectedRatio, format, ratioValue };
 }

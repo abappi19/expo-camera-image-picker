@@ -43,6 +43,8 @@
     "typecheck": "tsc --noEmit",
     "open:ios": "xed example/ios",
     "open:android": "open -a \"Android Studio\" example/android",
+    "run:ios": "cd example && expo run:ios",
+    "run:android": "cd example && expo run:android",
     "prepare": "EXPO_NONINTERACTIVE=1 expo-module build && husky",
     "commit": "commit",
     "release": "changeset",

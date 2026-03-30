@@ -6,6 +6,9 @@
       "@/*": [
         "./*"
       ],
+      "expo-camera-image-picker": [
+        "../src/index.ts"
+      ]
     },
     "skipLibCheck": true
   },

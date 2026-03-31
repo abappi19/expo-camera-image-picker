@@ -108,5 +108,7 @@
     "ts-jest": "^29.2.5",
     "typescript": "^5.6.3"
   },
-  "dependencies": {}
+  "dependencies": {
+    "@changesets/changelog-git": "^0.2.1"
+  }
 }

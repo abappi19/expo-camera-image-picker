@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.2.0
+
+### Minor Changes
+
+- f4e9c10: Added pinch to zoom feature and UI improved
+
 ## 1.1.1
 
 ### Patch Changes
